@@ -76,8 +76,6 @@ class SignUpActivity : AppCompatActivity() {
                     }
             }
         }
-
-
     }
 
     private fun saveUserInfo(
@@ -92,8 +90,8 @@ class SignUpActivity : AppCompatActivity() {
         val userMap = HashMap<String, Any>()
 
         userMap["uid"] = currentUserId
-        userMap["fullname"] = fullname
-        userMap["username"] = username
+        userMap["fullname"] = fullname.lowercase()
+        userMap["username"] = username.lowercase()
         userMap["email"] = email
         userMap["bio"] = "hey I am $fullname \n Welcome to the profile"
         userMap["image"] =
