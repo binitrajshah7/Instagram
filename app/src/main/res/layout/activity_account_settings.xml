@@ -92,12 +92,12 @@
         android:id="@+id/logout_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
         android:layout_above="@+id/delete_account_btn"
+        android:layout_marginHorizontal="20dp"
         android:background="@drawable/button_black_background"
         android:text="Logout"
-        android:textSize="16sp"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/delete_account_btn"
