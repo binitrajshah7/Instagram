@@ -2,13 +2,11 @@ package com.gmail.binitrajshah931.Adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.annotation.NonNull
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.gmail.binitrajshah931.Adapters.UserAdapter.viewHolder
+import com.gmail.binitrajshah931.Fragments.ProfileFragment
 import com.gmail.binitrajshah931.Models.User
 import com.gmail.binitrajshah931.R
 import com.gmail.binitrajshah931.databinding.UserItemLayoutBinding
@@ -27,7 +25,8 @@ class UserAdapter(
 
     private var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
-        val binding = UserItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            UserItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return viewHolder(binding)
     }
 
@@ -48,7 +47,7 @@ class UserAdapter(
                 .error(R.drawable.profile)
                 .into(view.userProfileImageSearch)
 
-            checkFollowingStatus(user.uid, view.followBtnSearch)
+            checkFollowingStatus(user.uid)
             view.followBtnSearch.setOnClickListener {
                 if (view.followBtnSearch.text.toString() == "Follow") {
                     firebaseUser?.uid.let { it1 ->
@@ -60,7 +59,7 @@ class UserAdapter(
                                 if (task.isSuccessful) {
                                     FirebaseDatabase.getInstance().reference
                                         .child("Follow").child(user.uid)
-                                        .child("Following").child(it1.toString())
+                                        .child("Followers").child(it1.toString())
                                         .setValue(true)
                                         .addOnCompleteListener { task ->
                                             if (task.isSuccessful) {
@@ -80,7 +79,7 @@ class UserAdapter(
                                 if (task.isSuccessful) {
                                     FirebaseDatabase.getInstance().reference
                                         .child("Follow").child(user.uid)
-                                        .child("Following").child(it1.toString())
+                                        .child("Followers").child(it1.toString())
                                         .removeValue()
                                         .addOnCompleteListener { task ->
                                             if (task.isSuccessful) {
@@ -92,9 +91,18 @@ class UserAdapter(
                     }
                 }
             }
+
+            view.userCard.setOnClickListener {
+                val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                pref.putString("profileId", user.uid)
+                pref.apply()
+                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ProfileFragment()).commit()
+
+            }
         }
 
-        private fun checkFollowingStatus(uid: String, followBtnSearch: Button) {
+        private fun checkFollowingStatus(uid: String) {
 
             val followingRef = firebaseUser?.uid.let { it1 ->
                 FirebaseDatabase.getInstance().reference
@@ -102,12 +110,11 @@ class UserAdapter(
                     .child("Following")
             }
 
-            followingRef.addValueEventListener(object: ValueEventListener{
+            followingRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if(dataSnapshot.child(uid).exists()){
+                    if (dataSnapshot.child(uid).exists()) {
                         view.followBtnSearch.text = "Following"
-                    }
-                    else{
+                    } else {
                         view.followBtnSearch.text = "Follow"
                     }
                 }

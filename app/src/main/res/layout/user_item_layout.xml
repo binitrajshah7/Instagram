@@ -10,6 +10,7 @@
     tools:ignore="HardcodedText">
 
     <RelativeLayout
+        android:id="@+id/userCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">

@@ -26,12 +26,12 @@
                     android:id="@+id/profile_fragment_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="username"
-                    android:textSize="18sp"
-                    android:maxLines="1"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
                     android:layout_centerVertical="true"
+                    android:maxLines="1"
+                    android:text="username"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <ImageView
@@ -110,6 +110,7 @@
                                 android:textSize="12sp"
                                 android:textColor="@color/black" />
                             <TextView
+                                android:id="@+id/total_followers"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="0"
@@ -133,6 +134,7 @@
                                 android:layout_gravity="center"
                                 android:textColor="@color/black"/>
                             <TextView
+                                android:id="@+id/total_following"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="0"
