@@ -56,7 +56,49 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         binding.editAccountSettingsBtn.setOnClickListener {
-            startActivity(Intent(requireContext(), AccountSettingsActivity::class.java))
+            val getButtonText = binding.editAccountSettingsBtn.text.toString()
+
+            when {
+                getButtonText == "Edit Profile" ->
+                    startActivity(Intent(requireContext(),
+                        AccountSettingsActivity::class.java))
+
+                getButtonText == "Follow" -> {
+                    firebaseUser?.uid.let { it1 ->
+                        FirebaseDatabase.getInstance().reference
+                            .child("Follow").child(it1.toString())
+                            .child("Following")
+                            .child(profileId)
+                            .setValue(true)
+                    }
+
+                    firebaseUser?.uid.let { it1 ->
+                        FirebaseDatabase.getInstance().reference
+                            .child("Follow").child(profileId)
+                            .child("Followers")
+                            .child(it1.toString())
+                            .setValue(true)
+                    }
+                }
+
+                getButtonText == "Following" -> {
+                    firebaseUser?.uid.let { it1 ->
+                        FirebaseDatabase.getInstance().reference
+                            .child("Follow").child(it1.toString())
+                            .child("Following")
+                            .child(profileId)
+                            .removeValue()
+                    }
+
+                    firebaseUser?.uid.let { it1 ->
+                        FirebaseDatabase.getInstance().reference
+                            .child("Follow").child(profileId)
+                            .child("Followers")
+                            .child(it1.toString())
+                            .removeValue()
+                    }
+                }
+            }
         }
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
@@ -121,8 +163,8 @@ class ProfileFragment : Fragment() {
 
     private fun getFollowings() {
         val followersRef = FirebaseDatabase.getInstance().reference
-                .child("Follow").child(profileId)
-                .child("Following")
+            .child("Follow").child(profileId)
+            .child("Following")
 
         followersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -143,9 +185,9 @@ class ProfileFragment : Fragment() {
             .child("Users")
             .child(profileId)
 
-        userRef.addValueEventListener(object: ValueEventListener{
+        userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     val user = dataSnapshot.getValue<User>(User::class.java)
 
                     binding.profileFragmentUsername.text = user!!.username
