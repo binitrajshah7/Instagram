@@ -27,7 +27,7 @@ class ImageCropActivity : AppCompatActivity() {
 
         UCrop.of(fileUri,Uri.fromFile(File(cacheDir,dest_uri)))
             .withOptions(options)
-            .withAspectRatio(0F, 0F)
+            .withAspectRatio(2F, 1F)
             .useSourceImageAspectRatio()
             .withMaxResultSize(2000,2000)
             .start(this@ImageCropActivity)
