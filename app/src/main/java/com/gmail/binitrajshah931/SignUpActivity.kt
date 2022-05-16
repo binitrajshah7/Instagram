@@ -105,8 +105,13 @@ class SignUpActivity : AppCompatActivity() {
                         "Account has been created Successfully.",
                         Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this, MainActivity::class.java)
+                    // for user seeing own post we keep ownself in following list by default
+                    val followingRef = FirebaseDatabase.getInstance().reference
+                        .child("Follow").child(currentUserId)
+                        .child("Following").child(currentUserId)
+                        .setValue(true)
 
+                    val intent = Intent(this, MainActivity::class.java)
                     // for not allowing users to go signIn or signup until logout is pressed
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
